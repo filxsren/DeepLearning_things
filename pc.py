@@ -50,6 +50,9 @@ for i in range(10):
 # result = download_content(url)
 # save_to_file("tips3.html", result)
 
+
+
+
 # doc = create_doc_from_filename("tips3.html")
 sum = 0 
 doc = BeautifulSoup(browser.page_source, "lxml")
