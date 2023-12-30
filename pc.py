@@ -66,3 +66,4 @@ for i in images:
     print(i["src"])
     urlretrieve(src, "tips_3/" + filename)
     print(sum)
+    time.sleep(0.3)
