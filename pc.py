@@ -1,48 +1,65 @@
-import urllib.parse
-import json
-import requests,re,time 
-import jsonpath
 
-#url='https://image.baidu.com/search/index?tn=baiduimage&ipn=r&ct=201326592&cl=2&lm=-1&st=-1&fm=result&fr=&sf=1&fmq=1698416001888_R&pv=&ic=&nc=1&z=&hd=&latest=&copyright=&se=1&showtab=0&fb=0&width=&height=&face=0&istype=2&dyTabStr=MTEsMCwxLDMsMiw2LDQsNSw4LDcsOQ%3D%3D&ie=utf-8&sid=&word=arduino+uno'.format(i)
+import urllib3
 
-#response = requests.get(url)
+# 第一个函数，用来下载网页，返回网页内容
+# 参数 url 代表所要下载的网页网址。
+# 整体代码和之前类似
+def download_content(url):
+	http = urllib3.PoolManager()
+	response = http.request("GET", url)
+	response_data = response.data
+	html_content = response_data.decode()
+	return html_content
+# 第二个函数，将字符串内容保存到文件中
+# 第一个参数为所要保存的文件名，第二个参数为要保存的字符串内容的变量
 
-#print(response)
+def save_to_file(filename, content):
+	fo = open(filename, "w", encoding="utf-8")
+	fo.write(content)
+	fo.close()
 
-import re,requests,time#导入所需要的库
+
+from bs4 import BeautifulSoup
+from urllib.request import urlretrieve
+from selenium import webdriver
+import time
+
+
+# 输入参数为要分析的 html 文件名，返回值为对应的 BeautifulSoup 对象
+def create_doc_from_filename(filename):
+	fo = open(filename, "r", encoding='utf-8')
+	html_content = fo.read()
+	fo.close()
+	doc = BeautifulSoup(html_content, "lxml")
+	return doc
+
+
+url = "https://www.duitang.com/search/?kw=fufu&type=feed"
 
 
 
-detail_urls = []#存储图片地址
 
-for i in range(1,400,20):#20页一张
-    url ='https://image.baidu.com/search/index?tn=baiduimage&ipn=r&ct=201326592&cl=2&lm=-1&st=-1&fm=result&fr=&sf=1&fmq=1698416001888_R&pv=&ic=&nc=1&z=&hd=&latest=&copyright=&se=1&showtab=0&fb=0&width=&height=&face=0&istype=2&dyTabStr=MTEsMCwxLDMsMiw2LDQsNSw4LDcsOQ%3D%3D&ie=utf-8&sid=&word=arduino+uno'.format(i)
-	response = requests.get(url,timeout = (3,7))#设置请求超时时间3-7秒
-	content = response.content.decode('utf-8')#使用utf-8进行解码
-	detail_url = re.findall('"objURL":"(.*?)"',content,re.DOTALL)#re.DOTALL忽略格式#匹配objURL的内容,大部分为objURL或URL
-	detail_urls.append(detail_url)#将获取到的图片地址保存在之前定义的列表中
-	response = requests.get(url)#请求网站
-	content = response.content
-b = 0#图片第几张
-for page in detail_urls:
-	for url in page:
-		try:
-			print('获取到{}张图片'.format(i))
-			response = requests.get(url)
-			content = response.content
-			if url[-3:] == 'jpg':
-				with open('保存的地址{}.jpg'.format(b),'wb') as f:
-				f.write(content)
-			elif url[-4:] == 'jpeg':
-				with open('保存的地址{}.jpeg'.format(b),'wb') as f:
-				f.write(content)
-			elif url[-3:] == 'png':
-				with open('保存的地址{}.pon'.format(b),'wb') as f:
-				f.write(content)
-			else:
-				continue
-				
-		except:
-			print('超时')
-		b +=1
+browser = webdriver.Edge()
+# 通过网页地址打开网页，此时会弹出浏览器，并加载相应的网页
+browser.get(url=url)
 
+for i in range(10):
+    browser.execute_script('window.scrollTo(0,document.body.scrollHeight)')
+    time.sleep(0.5)
+	
+# result = download_content(url)
+# save_to_file("tips3.html", result)
+
+# doc = create_doc_from_filename("tips3.html")
+sum = 0 
+doc = BeautifulSoup(browser.page_source, "lxml")
+images = doc.find_all("img")
+for i in images:
+    sum+=1
+    src = i["src"]
+    filename = src.split("/")[-1]
+    if filename[-4:] == "webp":
+        filename = filename[:-5]
+    print(i["src"])
+    urlretrieve(src, "tips_3/" + filename)
+    print(sum)

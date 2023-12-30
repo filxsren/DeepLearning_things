@@ -29,6 +29,7 @@ class CustomDataset(data.Dataset):
 class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
+        nn.Dropout1d(0.5)
         self.fc1 = nn.Linear(1, 16)
         self.conv1=nn.Conv1d(in_channels=1, out_channels=2,kernel_size=3)
         self.fc2 = nn.Linear(28,16)
@@ -51,6 +52,7 @@ class Net(nn.Module):
 test_data = CustomDataset()
 test_loader = DataLoader(dataset=test_data,batch_size=10,shuffle=True,drop_last=False)
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
 print(device)
 net = Net().to(device)
 
