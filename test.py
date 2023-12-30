@@ -6,6 +6,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 import numpy as np
+
 class CustomDataset(data.Dataset):
     def __init__(self):
         self.lable = [0]*10
@@ -95,3 +96,4 @@ for j in range(10):
         # 预测结果
         print('predict: ', torch.max(outputs, 1))
         _, predicted = torch.max(outputs, 1)
+

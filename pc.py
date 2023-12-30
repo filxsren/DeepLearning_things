@@ -34,7 +34,7 @@ def create_doc_from_filename(filename):
 	return doc
 
 
-url = "https://www.duitang.com/search/?kw=fufu&type=feed"
+url = "https://www.duitang.com/search/?kw=miku&type=feed"
 
 
 
@@ -46,7 +46,7 @@ browser.get(url=url)
 for i in range(10):
     browser.execute_script('window.scrollTo(0,document.body.scrollHeight)')
     time.sleep(0.5)
-	
+# browser.find_elements().click()
 # result = download_content(url)
 # save_to_file("tips3.html", result)
 
@@ -58,12 +58,45 @@ sum = 0
 doc = BeautifulSoup(browser.page_source, "lxml")
 images = doc.find_all("img")
 for i in images:
-    sum+=1
-    src = i["src"]
-    filename = src.split("/")[-1]
-    if filename[-4:] == "webp":
-        filename = filename[:-5]
-    print(i["src"])
-    urlretrieve(src, "tips_3/" + filename)
-    print(sum)
-    time.sleep(0.3)
+	sum+=1
+	# try:
+	# 	src = i["src"]
+	# 	if int(i["width"])>30:
+	# 		filename = src.split("/")[-1]
+	# 		if filename[-4:] == "webp":
+	# 			filename = filename[:-5]
+	# 		print(i["src"])
+	# 		if("png" in filename):
+	# 			n=-3
+	# 		if("gif" in filename):
+	# 			n=-3
+	# 		if("jpg" in filename):
+	# 			n=-3
+	# 		if("jpeg" in filename):
+	# 			n=-4
+	# 		urlretrieve(src, "tips/" + str(sum) +"."+ filename[n:])
+	# 		print(sum)
+	# 		time.sleep(0.3)
+	# 	if sum == 100:
+	# 		break
+	# except:
+	# 	print("feild")
+	src = i["src"]
+	if int(i["height"])>30:
+		filename = src.split("/")[-1]
+		if filename[-4:] == "webp":
+			filename = filename[:-5]
+		print(i["src"])
+		if("png" in filename):
+			n=-3
+		if("gif" in filename):
+			n=-3
+		if("jpg" in filename):
+			n=-3
+		if("jpeg" in filename):
+			n=-4
+		urlretrieve(src, "tips/" + str(sum) +"."+ filename[n:])
+		print(sum)
+		time.sleep(0.3)
+	if sum == 100:
+		break
