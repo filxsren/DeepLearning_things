@@ -8,7 +8,7 @@ import torch.optim as optim
 import numpy as np
 
 class CustomDataset(data.Dataset):
-    def __init__(self):
+    def __init__(self,bool):
         self.lable = [0]*10
         self.testData = [0]*10
         for i in range(0,10):        
@@ -60,29 +60,41 @@ net = Net().to(device)
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
 
-for epoch in range(20000):
-    
-    running_loss = 0.0
-    for i, data in enumerate(test_loader, 0):
-        # 获取输入数据
-        inputs, labels = data
+def train():
+    try:
+        net.load_state_dict(torch.load("save.pt"))
+        net.eval()
+        print("load_state")
+        n=2
+    except:
+        print("no save.pt")
+        n=200
 
-        inputs = torch.tensor(inputs,dtype=torch.float,device=device).view(10,1)
-        # print(inputs)
-        labels = torch.tensor(labels,device=device)
-        # 清空梯度缓存
-        optimizer.zero_grad()
+    for epoch in range(n):
         
-        outputs = net(inputs)
-        loss = criterion(outputs, labels)
-        loss.backward()
-        optimizer.step()
-        
-        # 打印统计信息
-        running_loss += loss.item()
-
-        print('[%d, %5d] loss: %.3f' % (epoch + 1, i+1, running_loss / 2000))
         running_loss = 0.0
+        for i, data in enumerate(test_loader, 0):
+            # 获取输入数据
+            inputs, labels = data
+
+            inputs = torch.tensor(inputs,dtype=torch.float,device=device).view(10,1)
+            # print(inputs)
+            labels = torch.tensor(labels,device=device)
+            # 清空梯度缓存
+            optimizer.zero_grad()
+            
+            outputs = net(inputs)
+            loss = criterion(outputs, labels)
+            loss.backward()
+            optimizer.step()
+            
+            # 打印统计信息
+            running_loss += loss.item()
+
+            print('[%d, %5d] loss: %.3f' % (epoch + 1, i+1, running_loss / 2000))
+            running_loss = 0.0
+    torch.save(net.state_dict(), 'save.pt')
+
 for j in range(10):
     for i, data in enumerate(test_loader, 0):
             # 获取输入数据

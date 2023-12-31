@@ -23,6 +23,8 @@ from bs4 import BeautifulSoup
 from urllib.request import urlretrieve
 from selenium import webdriver
 import time
+from PIL import Image
+import torchvision.transforms as transforms
 
 
 # 输入参数为要分析的 html 文件名，返回值为对应的 BeautifulSoup 对象
@@ -100,3 +102,4 @@ for i in images:
 		time.sleep(0.3)
 	if sum == 100:
 		break
+

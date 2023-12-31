@@ -1,0 +1,38 @@
+class CustomDataset(data.Dataset):
+    def __init__(self,bool):
+        self.lable = [0]*10
+        self.testData = [0]*10
+        for i in range(0,10):        
+            self.testData[i] = random.randint(0,2)
+            self.lable[i] = 0
+        n=random.randint(0,9)
+        self.testData[n]=random.randint(0,2)*20+random.randint(-5,8)
+        self.lable[n]=1
+    def __getitem__(self, index):
+        lable = list(self.lable)
+        testData = list(self.testData)
+
+        return testData[index], lable[index]
+    def __len__(self):
+
+        return len(self.lable)
+    def get_lable(self):
+        return self.lable
+class Net(nn.Module):
+    def __init__(self):
+        super(Net, self).__init__()
+        nn.Dropout1d(0.5)
+        self.fc1 = nn.Linear(1, 16)
+        self.conv1=nn.Conv1d(in_channels=1, out_channels=2,kernel_size=3)
+        self.fc2 = nn.Linear(28,16)
+        self.fc3 = nn.Linear(16, 2)
+
+    def forward(self, x):
+
+        x = F.relu(self.fc1(x))
+        x = x.view(10, 1, 16)
+        x = self.conv1(x)
+        x = x.view(10, 28)
+        x = F.relu(self.fc2(x))
+        x = self.fc3(x)
+        return x
