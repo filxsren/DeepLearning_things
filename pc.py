@@ -61,45 +61,45 @@ doc = BeautifulSoup(browser.page_source, "lxml")
 images = doc.find_all("img")
 for i in images:
 	sum+=1
-	# try:
-	# 	src = i["src"]
-	# 	if int(i["width"])>30:
-	# 		filename = src.split("/")[-1]
-	# 		if filename[-4:] == "webp":
-	# 			filename = filename[:-5]
-	# 		print(i["src"])
-	# 		if("png" in filename):
-	# 			n=-3
-	# 		if("gif" in filename):
-	# 			n=-3
-	# 		if("jpg" in filename):
-	# 			n=-3
-	# 		if("jpeg" in filename):
-	# 			n=-4
-	# 		urlretrieve(src, "tips/" + str(sum) +"."+ filename[n:])
-	# 		print(sum)
-	# 		time.sleep(0.3)
-	# 	if sum == 100:
-	# 		break
-	# except:
-	# 	print("feild")
-	src = i["src"]
-	if int(i["height"])>30:
-		filename = src.split("/")[-1]
-		if filename[-4:] == "webp":
-			filename = filename[:-5]
-		print(i["src"])
-		if("png" in filename):
-			n=-3
-		if("gif" in filename):
-			n=-3
-		if("jpg" in filename):
-			n=-3
-		if("jpeg" in filename):
-			n=-4
-		urlretrieve(src, "tips/" + str(sum) +"."+ filename[n:])
-		print(sum)
-		time.sleep(0.3)
+	try:
+		src = i["src"]
+		if int(i["height"])>30:
+			filename = src.split("/")[-1]
+			if filename[-4:] == "webp":
+				filename = filename[:-5]
+			print(i["src"])
+			if("png" in filename):
+				n=-3
+			if("gif" in filename):
+				n=-3
+			if("jpg" in filename):
+				n=-3
+			if("jpeg" in filename):
+				n=-4
+			urlretrieve(src, "tips/" + str(sum) +"."+ filename[n:])
+			print(sum)
+			time.sleep(0.3)
+		if sum == 100:
+			break
+	except:
+		print("feild")
+	# src = i["src"]
+	# if int(i["height"])>30:
+	# 	filename = src.split("/")[-1]
+	# 	if filename[-4:] == "webp":
+	# 		filename = filename[:-5]
+	# 	print(i["src"])
+	# 	if("png" in filename):
+	# 		n=-3
+	# 	if("gif" in filename):
+	# 		n=-3
+	# 	if("jpg" in filename):
+	# 		n=-3
+	# 	if("jpeg" in filename):
+	# 		n=-4
+	# 	urlretrieve(src, "tips/" + str(sum) +"."+ filename[n:])
+	# 	print(sum)
+	# 	time.sleep(0.3)
 	if sum == 100:
 		break
 
