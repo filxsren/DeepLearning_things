@@ -8,7 +8,7 @@ import torch.optim as optim
 import numpy as np
 
 class CustomDataset(data.Dataset):
-    def __init__(self,bool):
+    def __init__(self):
         self.lable = [0]*10
         self.testData = [0]*10
         for i in range(0,10):        
@@ -23,8 +23,8 @@ class CustomDataset(data.Dataset):
 
         return testData[index], lable[index]
     def __len__(self):
-
         return len(self.lable)
+    
     def get_lable(self):
         return self.lable
 class Net(nn.Module):
