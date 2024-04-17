@@ -8,7 +8,7 @@ import torch.optim as optim
 import numpy as np
 
 class CustomDataset(data.Dataset):
-    def __init__(self,bool):
+    def __init__(self):
         self.lable = [0]*10
         self.testData = [0]*10
         for i in range(0,10):        
@@ -31,10 +31,10 @@ class Net(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
         nn.Dropout1d(0.5)
-        self.fc1 = nn.Linear(1, 16)
+        self.fc1 = nn.Linear(1,16)
         self.conv1=nn.Conv1d(in_channels=1, out_channels=2,kernel_size=3)
         self.fc2 = nn.Linear(28,16)
-        self.fc3 = nn.Linear(16, 2)
+        self.fc3 = nn.Linear(16,1)
 
     def forward(self, x):
 
@@ -60,6 +60,7 @@ net = Net().to(device)
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
 
+
 def train():
     try:
         net.load_state_dict(torch.load("save.pt"))
@@ -77,9 +78,9 @@ def train():
             # 获取输入数据
             inputs, labels = data
 
-            inputs = torch.tensor(inputs,dtype=torch.float,device=device).view(10,1)
+            inputs = torch.tensor(inputs,dtype=torch.float32,device=device).view(10,1)
             # print(inputs)
-            labels = torch.tensor(labels,device=device)
+            labels = torch.tensor(labels,dtype=torch.long,device=device)
             # 清空梯度缓存
             optimizer.zero_grad()
             
@@ -95,17 +96,18 @@ def train():
             running_loss = 0.0
     torch.save(net.state_dict(), 'save.pt')
 
-for j in range(10):
-    for i, data in enumerate(test_loader, 0):
-            # 获取输入数据
-        inputs, labels = data
-        inputs = torch.tensor(inputs,dtype=torch.float,device=device).view(10,1)
-        print(inputs)
-        # print(inputs)
-        labels = torch.tensor(labels,device=device)
-        outputs = net(inputs)
-        print('outputs: ', outputs)
-        # 预测结果
-        print('predict: ', torch.max(outputs, 1))
-        _, predicted = torch.max(outputs, 1)
+# for j in range(10):
+#     for i, data in enumerate(test_loader, 0):
+#             # 获取输入数据
+#         inputs, labels = data
+#         inputs = torch.tensor(inputs,dtype=torch.float,device=device).view(10,1)
+#         print(inputs)
+#         # print(inputs)
+#         labels = torch.tensor(labels,device=device)
+#         outputs = net(inputs)
+#         print('outputs: ', outputs)
+#         # 预测结果
+#         print('predict: ', torch.max(outputs, 1))
+#         _, predicted = torch.max(outputs, 1)
 
+train()
