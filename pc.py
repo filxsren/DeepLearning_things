@@ -22,6 +22,9 @@ def save_to_file(filename, content):
 from bs4 import BeautifulSoup
 from urllib.request import urlretrieve
 from selenium import webdriver
+from selenium.webdriver import Chrome, ChromeOptions
+from selenium.webdriver.common.by import By
+
 import time
 from PIL import Image
 import torchvision.transforms as transforms
@@ -38,16 +41,24 @@ def create_doc_from_filename(filename):
 
 url = "https://www.duitang.com/search/?kw=miku&type=feed"
 
-
-
-
 browser = webdriver.Edge()
+
+# opt = ChromeOptions()            # 创建Chrome参数对象
+# opt.headless = True              # 把Chrome设置成可视化无界面模式，windows/Linux 皆可
+# driver = webdriver.Chrome()
+# driver.get("网站")
+# a1 = driver.find_element(By.CSS_SELECTOR,'#livenews-id-1-202301272620081211 > div.media-content > h2 > a').text
+# print(a1)
+
 # 通过网页地址打开网页，此时会弹出浏览器，并加载相应的网页
 browser.get(url=url)
 
 for i in range(10):
     browser.execute_script('window.scrollTo(0,document.body.scrollHeight)')
     time.sleep(0.5)
+
+browser.find_element(By.CLASS_NAME,'woo-nxt').click()
+
 # browser.find_elements().click()
 # result = download_content(url)
 # save_to_file("tips3.html", result)

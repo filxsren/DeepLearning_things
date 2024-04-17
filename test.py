@@ -23,8 +23,8 @@ class CustomDataset(data.Dataset):
 
         return testData[index], lable[index]
     def __len__(self):
-
         return len(self.lable)
+    
     def get_lable(self):
         return self.lable
 class Net(nn.Module):
